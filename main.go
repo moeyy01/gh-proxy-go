@@ -140,7 +140,7 @@ func proxy(c *gin.Context, u string) {
 
 	if contentLength, ok := resp.Header["Content-Length"]; ok {
 		if size, err := strconv.Atoi(contentLength[0]); err == nil && size > sizeLimit {
-			c.Redirect(http.StatusFound, u+c.Request.URL.String())
+			c.String(http.StatusRequestEntityTooLarge, "File too large.")
 			return
 		}
 	}
