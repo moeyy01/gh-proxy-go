@@ -155,6 +155,20 @@ func proxy(c *gin.Context, u string) {
 		}
 	}
 
+	// 常见文件类型
+	suffixDict := map[string]string{
+		"css":  "text/css; charset=utf-8",
+		"js":   "application/javascript; charset=utf-8",
+		"xml":  "text/xml; charset=utf-8",
+		"json": "application/json; charset=utf-8",
+	}
+	subStrs := strings.Split(req.URL.RequestURI(), ".")
+	suffix := subStrs[len(subStrs)-1]
+	// 更新对应Content-Type
+	if mimeType, ok := suffixDict[suffix]; ok {
+		c.Header("Content-Type", mimeType)
+	}
+
 	if location := resp.Header.Get("Location"); location != "" {
 		if checkURL(location) != nil {
 			c.Header("Location", "/"+location)
